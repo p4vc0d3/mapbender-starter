@@ -1,16 +1,34 @@
 fom:
-  core:
-    manager:
-      btn:
-        login: Iniciar sesión
-  user:
-      login:
-          login:
-              title: Iniciar sesión
-              password: Contraseña
-              forgot_password: '¿Se olvidó su contraseña'
-              login: Iniciar sesión
+    core:
+        manager:
+            btn:
+                login: Iniciar sesión
+    user:
+        login:
+            login:
+                title: Iniciar sesión
+                password: Contraseña
+                forgot_password: '¿Se olvidó su contraseña'
+                login: Iniciar sesión
 mb:
+    core:
+        layertree:
+            class:
+                title: Capas
+        sketch:
+            inputs:
+                label: Etiqueta
+            geometrytype:
+                point: Punto
+                line: Línea
+                polygon: Polígono
+                rectangle: Rectángulo
+                circle: Círculo
+            class:
+                title: Dibujos
+    coordinatesutility:
+        class:
+            title: Coordenadas
     actions:
         filter: Buscar
     manager:
