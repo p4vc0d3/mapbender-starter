@@ -1,0 +1,23 @@
+fom:
+  core:
+    manager:
+      btn:
+        login: Iniciar sesión
+  user:
+      login:
+          login:
+              title: Iniciar sesión
+              password: Contraseña
+              forgot_password: '¿Se olvidó su contraseña'
+              login: Iniciar sesión
+mb:
+    actions:
+        filter: Buscar
+    manager:
+        admin:
+            application:
+                description: Descripción
+    terms:
+        application:
+            singular: Mapa
+            plural: Mapas

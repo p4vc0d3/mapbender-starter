@@ -1,0 +1,107 @@
+{% extends "MapbenderManagerBundle::layouts/blocklist.html.twig" %}
+
+{%- set title = 'mb.terms.application.plural' | trans -%}
+
+{% block list_actions %}
+{%- if create_permission -%}
+<div class="content-box content-box-md">
+  <a href="{{ path('mapbender_manager_application_new') }}">
+      <i class="fa fas fa-lg fa-plus"></i>
+      <span>{{ 'mb.manager.admin.application.new.title' | trans }}</span>
+  </a>
+</div>
+{%- endif -%}
+{% endblock %}
+
+{% block manager_content %}
+  {%- set items = applications -%}
+  {%- set list_id = 'listFilterApplications' -%}
+  {%- set list_class = 'listFilterApplicationBoxes' -%}
+  {{ parent() }}
+{% endblock %}
+
+{%- block boxlist_item_content -%}
+{%- set application = item -%}
+          <div class="row">
+            <div class="col-md-2 col-xs-12 col-12">
+              <a target="_blank" href="{{ path('mapbender_core_application_application', {'slug': application.slug}) }}" title="{{ 'mb.manager.admin.application.view' | trans }} {{ application.title }}">
+              {%- set _screenshot_src = application_screenshot_path(application) -%}
+              {%- if _screenshot_src %}
+                <div class="preview-box">
+                  <img src="{{ _screenshot_src }}">
+                </div>
+              {% else %}
+                <div class="preview-box preview-info">
+                  <div class="placeholder-icon">
+                    <span class="fa fas fa-image"></span>
+                  </div>
+                </div>
+              {% endif %}
+              </a>
+            </div>
+            <div class="col-md-10 col-xs-12 col-12">
+              {{ parent() }}
+            </div>
+          </div>
+{%- endblock -%}
+
+{%- block item_interactions -%}
+              <a class="btn btn-default" target="_blank" href="{{ path('mapbender_core_application_application', {'slug': application.slug}) }}" title="{{ 'mb.manager.admin.application.view' | trans }}">
+                <i class="fa fas fa-desktop"></i>
+              </a>
+              {# for custom 'CLONE' grant see CoreBundle\Component\Security\Voter\BaseApplicationVoter and child classes #}
+              {%- if is_granted('CLONE', application) -%}
+                <a class="btn btn-default" href="{{ path('mapbender_manager_application_copydirectly', {'slug': application.slug}) }}" title="{{ 'mb.manager.admin.application.duplicate'|trans }}">
+                  <i class="fa far fa-copy"></i>
+                </a>
+              {% endif %}
+              {% if application.source is constant('Mapbender\\CoreBundle\\Entity\\Application::SOURCE_DB') and is_granted('EDIT', application) %}
+                <a class="btn btn-default" target="_blank" href="{{ path('mapbender_manager_application_exportdirect',  {'slug': application.slug}) }}" title="{{ 'mb.manager.managerbundle.export_application' | trans }}">
+                  <i class="fa fas fa-download"></i>
+                </a>
+              {% endif %}
+              {% if application.source is constant('Mapbender\\CoreBundle\\Entity\\Application::SOURCE_DB') and is_granted('EDIT', application) %}
+              <a class="btn btn-default" href="{{ path('mapbender_manager_application_edit',  {'slug': application.slug}) }}" title="{{ 'mb.actions.edit' | trans }}">
+                <i class="fa fas fa-cog"></i>
+              </a>
+              {% endif %}
+
+              {% if application.source is constant('Mapbender\\CoreBundle\\Entity\\Application::SOURCE_DB') and is_granted('EDIT', application) %}
+                <span class="btn btn-default -fn-toggle-flag {{ application.published ? '-js-on' : '-js-off' }}" title="{{ 'mb.manager.admin.application.public.on_off' | trans }}"
+                    data-url="{{ path('mapbender_manager_application_togglestate', {'slug': application.slug}) }}"
+                    data-token="{{ csrf_token('application_edit') }}"
+                    data-toggle-flag-icons="fa-eye-slash:fa-eye">
+                    <i class="fa fas {{ application.published ? 'fa-eye' : 'fa-eye-slash' }}"></i>
+                </span>
+              {% endif %}
+
+              {% if application.source is constant('Mapbender\\CoreBundle\\Entity\\Application::SOURCE_DB') and is_granted('DELETE', application) %}
+                <span class="btn btn-default -fn-delete"
+                      title="{{'mb.manager.admin.application.delete'|trans}} {{ application.title }}"
+                      data-url="{{ path('mapbender_manager_application_delete', { 'slug': application.slug}) }}"
+                      data-token="{{ csrf_token('application_delete') }}"
+                      data-slug="{{ application.slug }}"
+                ><i class="fa fa-trash-o far fa-trash-alt"></i></span>
+              {% endif %}
+{%- endblock -%}
+
+{%- block item_title -%}
+    <a href="{{ path('mapbender_core_application_application', {'slug': application.slug}) }}" title="{{ 'mb.manager.admin.application.view_this' | trans }}">
+      {{ application.title }}
+    </a>
+{%- endblock -%}
+
+{%- block item_content_main -%}
+    <table class="table table-borderless table-condensed">
+      <tbody>
+        <tr>
+          <th>{{ 'mb.manager.admin.application.description' | trans }}:</th>
+          <td>{{ item.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+{%- endblock -%}
+
+{%- block boxlist_placeholder_content -%}
+{{- 'mb.manager.admin.application.no_application' | trans -}}
+{%- endblock -%}
